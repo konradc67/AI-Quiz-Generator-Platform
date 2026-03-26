@@ -1,11 +1,23 @@
 import MainLayout from './components/layout/MainLayouts'
 import CreateQuiz from './components/layout/CreateQuiz';
+import Profile from './components/layout/Profile';
+import MyHistory from './components/layout/MyHistory';
+import Logout from './components/layout/Logout';
+import Dashboard from './components/layout/Dashboard';
+import { Routes, Route } from "react-router-dom";
 import './index.css'
+
 export default function App(){
 return (
 
-<MainLayout>
-     <CreateQuiz/>
+    <MainLayout>
+        <Routes>
+            <Route path="/" element={<CreateQuiz/>} />
+            <Route path="/history" element={<MyHistory/>} />
+            <Route path="/profile" element={<Profile/>} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
     </MainLayout>
 );
 

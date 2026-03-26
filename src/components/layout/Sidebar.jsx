@@ -1,18 +1,23 @@
+import { NavLink } from "react-router-dom";
 export default function Sidebar() {
-  return (
-    <aside className="sidebar"> 
-      <div className="nav-item active">
+    return (
+        <aside className="sidebar">
+            <NavLink to="/dashboard" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+                <div className="nav-icon">📊</div> Dashboard
+            </NavLink>
+      <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
         <div className="nav-icon">📝</div> Create Quiz
-      </div>
-      <div className="nav-item">
+      </NavLink>
+      <NavLink to="/history" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"
+} >
         <div className="nav-icon">📜</div> My History
-      </div>
-      <div className="nav-item">
+      </NavLink>
+          <NavLink to="/profile" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
         <div className="nav-icon">👤</div> Profile
-      </div>
-      <div className="nav-item logout">
+      </NavLink>
+          <NavLink to="/logout" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
         <div className="nav-icon">🚪</div> Logout
-      </div>
+      </NavLink>
     </aside>
   );
 }
