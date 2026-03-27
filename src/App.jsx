@@ -4,6 +4,8 @@ import Profile from './components/layout/Profile';
 import MyHistory from './components/layout/MyHistory';
 import Logout from './components/layout/Logout';
 import Dashboard from './components/layout/Dashboard';
+import Register from './components/layout/Register';
+import Login from './components/layout/Login';
 import { Routes, Route } from "react-router-dom";
 import './index.css'
 
@@ -17,6 +19,8 @@ return (
             <Route path="/profile" element={<Profile/>} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
         </Routes>
     </MainLayout>
 );

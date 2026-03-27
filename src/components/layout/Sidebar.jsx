@@ -3,7 +3,7 @@ export default function Sidebar() {
     return (
         <aside className="sidebar">
             <NavLink to="/dashboard" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-                <div className="nav-icon">📊</div> Dashboard
+                <div className="nav-icon">🚀</div> Dashboard
             </NavLink>
       <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
         <div className="nav-icon">📝</div> Create Quiz

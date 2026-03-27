@@ -406,3 +406,109 @@ input[type="range"]::-moz-range-thumb:hover {
     transform: scale(1.2);
     box-shadow: 0 0 16px rgba(29, 233, 182, 0.9);
 }
+
+/*login & register*/
+.auth-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(20, 29, 38,0.4);
+    backdrop-filter: blur(8px);
+    font-family: Arial, sans-serif;
+}
+
+.auth-card {
+    width: 450px;
+    padding: 30px;
+    border-radius: 16px;
+    background: rgba(20, 29, 38, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+}
+
+    .auth-card input {
+        padding: 12px;
+        border-radius: 8px;
+        background: rgba(20, 29, 38, 0.5);
+        border: 1px solid rgba(0, 255, 255, 0.1);
+        color: white;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+.auth-button {
+    padding: 12px;
+    border-radius: 20px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.2s all ease;
+}
+
+    .auth-button:hover {
+        background: #00cccc;
+    }
+
+.auth-link {
+    text-align: center;
+    color: #9aa7b5;
+    font-size: 13px;
+}
+.logo-icon-center {
+    font-size: 30px;
+    color: var(--neon-cyan);
+    text-shadow: var(--glow);
+    text-align: center;
+    margin: 0 auto 0 auto;
+    display: block;
+}
+
+/*dropdown for avatar*/
+
+.header-actions {
+    position: relative;
+}
+
+.avatar-dropdown {
+    position: absolute;
+    top: 50px;
+    right: -35px;
+    background: rgba(20, 29, 38, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    z-index: 100;
+    cursor: default;
+    user-select: none;
+}
+
+    .avatar-dropdown a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: 0.2s;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .avatar-dropdown a:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
