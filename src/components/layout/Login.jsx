@@ -18,7 +18,7 @@ export default function Login() {
         };
 
         try {
-            const url = 'https://ai-quiz-generator-platform-b-git-7063a5-kitolsky-9193s-projects.vercel.app/user/login/';
+            const url = 'https://ai-quiz-generator-platform-backend.vercel.app/user/login/';
             
             const response = await fetch(url, {
                 method: 'POST',
