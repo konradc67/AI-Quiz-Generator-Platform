@@ -35,9 +35,8 @@ body {
 }
 
 .app-container {
-    width: 1600px; 
-    max-width: 98%; 
-    height: 92vh; 
+    width: 90vw;
+    height: 90vh;
     background: rgba(20, 29, 38, 0.95);
     border: 1px solid rgba(0, 255, 255, 0.2);
     border-radius: 16px;
@@ -46,7 +45,6 @@ body {
     box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
     position: relative;
 }
-
 .app-container::before, .app-container::after {
     content: '⚙️';
     position: absolute;
