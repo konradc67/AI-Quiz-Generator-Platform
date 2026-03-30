@@ -22,7 +22,7 @@ export default function Register() {
 
         }
         try{
-            const url = 'https://ai-quiz-generator-platform-b-git-7063a5-kitolsky-9193s-projects.vercel.app/user/register'
+            const url = 'https://ai-quiz-generator-platform-b-git-7063a5-kitolsky-9193s-projects.vercel.app/user/register/'
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
