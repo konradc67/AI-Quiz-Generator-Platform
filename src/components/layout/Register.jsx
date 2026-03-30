@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Register() {
     // /user/register
     const [username,setUsername] = useState('');
@@ -6,12 +8,10 @@ export default function Register() {
     const [password,setPassword] = useState('');
     const [confirmPassword,setConfirmPassword] = useState('');
     const [isLoading,setIsLoading] = useState(false);
-    const [message,setMessage] = useState({type : '',text :''});
     const handleRegister = async (e)=>{
         e.preventDefault();
-        setMessage({type: "",text: ""});
-        if (password != confirmPassword){
-        setMessage({ type: 'error', text: 'Hasła nie są identyczne!' });
+        if (password != confirmPassword) {
+            toast.error('Passwords do not match!');
         return;        
         };
         setIsLoading(true);
@@ -31,20 +31,20 @@ export default function Register() {
                 body: JSON.stringify(payload)
             })
             const data = await response.json();
-            if (response.ok){
-                setMessage({ type: 'success', text: 'Konto utworzone pomyślnie! Możesz się zalogować.' });
+            if (response.ok) {
+                toast.success('Account created successfully! You can now log in.');
                 setUsername('');
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
             }else {
                 const errorText = data.detail || (typeof data === 'object' ? Object.values(data)[0] : 'Błąd rejestracji.');
-                setMessage({ type: 'error', text: errorText });
+                toast.error(errorText);
             }
         }
             catch(error){
-                console.error('Błąd połączenia z serwerem:', error);
-                setMessage({ type: 'error', text: 'Błąd połączenia z serwerem.' });
+            console.error('Błąd połączenia z serwerem:', error);
+            toast.error('Server connection error.');
             }finally{
                 setIsLoading(false);
             }
@@ -57,16 +57,6 @@ export default function Register() {
                 <div className="logo-icon-center">🚀</div>
                 <h2 style={{ color: "white", textAlign: "center", marginBottom: "10px" }}>CREATE ACCOUNT</h2>
 
-                {message.text && (
-                    <div style={{
-                        color: message.type === 'error' ? '#ff4d4d' : 'var(--neon-green)',
-                        textAlign: 'center',
-                        fontSize: '14px',
-                        marginBottom: '10px'
-                    }}>
-                        {message.text}
-                    </div>
-                )}
 
                 
                 <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
     const [isLoading, setIsLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMessage({ type: '', text: '' });
         setIsLoading(true);
 
         const payload = {
@@ -31,7 +31,7 @@ export default function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage({ type: 'success', text: 'Zalogowano pomyślnie! Przekierowywanie...' });
+                toast.success('Logged in successfully! Redirecting...');
                 
                 localStorage.setItem('accessToken', data.access || data.token);
 
@@ -40,13 +40,13 @@ export default function Login() {
                 }, 1000);
 
             } else {
-                const errorText = data.detail || data.non_field_errors || 'Nieprawidłowy e-mail lub hasło.';
-                setMessage({ type: 'error', text: errorText });
+                const errorText = data.detail || data.non_field_errors || 'Invalid e-mail or password.';
+                toast.error(errorText);
             }
 
         } catch (error) {
             console.error('Błąd połączenia:', error);
-            setMessage({ type: 'error', text: 'Błąd połączenia z serwerem.' });
+            toast.error('Server connection error.');
         } finally {
             setIsLoading(false);
         }
@@ -57,17 +57,6 @@ export default function Login() {
             <div className="auth-card">
                 <div className="logo-icon-center">🧠</div>
                 <h2 style={{ color: "white", textAlign: "center", marginBottom: "10px" }}>WELCOME BACK</h2>
-
-                {message.text && (
-                    <div style={{
-                        color: message.type === 'error' ? '#ff4d4d' : 'var(--neon-green)',
-                        textAlign: 'center',
-                        fontSize: '14px',
-                        marginBottom: '10px'
-                    }}>
-                        {message.text}
-                    </div>
-                )}
 
                 <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <input 
