@@ -394,6 +394,38 @@ select {
 
 .auth-button:hover { background: #00cccc; }
 
+.auth-return-button {
+    width: 40px;
+    height: 5px;
+    right: 10px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+    .auth-return-button::before, .auth-return-button::after {
+        content: "";
+        position: absolute;
+        left: 25%;
+        right: 25%;
+        width: 50%;
+        height: 4px;
+        background-color: #10B981;
+        transform-origin: center;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.2),0 0 5px rgba(0, 255, 255, 0.2);
+    }
+
+.auth-return-button::before{
+    transform: rotate(45deg);
+}
+.auth-return-button::after {
+    transform: rotate(-45deg);
+}
+
 .auth-link {
     text-align: center;
     color: #9aa7b5;

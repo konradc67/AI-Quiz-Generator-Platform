@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
     
     const [isLoading, setIsLoading] = useState(false);
 
@@ -55,6 +57,9 @@ export default function Login() {
     return (
         <div className="auth-page">
             <div className="auth-card">
+                <button className="auth-return-button"
+                    onClick={() => navigate('/')}>
+                </button>
                 <div className="logo-icon-center">🧠</div>
                 <h2 style={{ color: "white", textAlign: "center", marginBottom: "10px" }}>WELCOME BACK</h2>
 
@@ -80,7 +85,7 @@ export default function Login() {
                 </form>
 
                 <div className="auth-link" style={{ marginTop: '10px' }}>
-                    Don't have an account? <a href="/register" style={{ color: "var(--neon-cyan)", textDecoration: "none" }}>Sign Up</a>
+                    Don't have an account? <Link to="/register" style={{ color: "var(--neon-cyan)", textDecoration: "none" }}>Sign Up</Link>
                 </div>
             </div>
         </div>
