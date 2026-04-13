@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
     const navigate = useNavigate();
     
     const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,7 @@ export default function Login() {
         setIsLoading(true);
 
         const payload = {
-            email: email,
+            username: username,
             password: password
         };
 
@@ -73,9 +73,9 @@ export default function Login() {
                     />
                     <input 
                         type="password" 
-                        placeholder="Password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Username" 
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         required
                     />
                     
