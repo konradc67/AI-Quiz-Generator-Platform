@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 export default function Header() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+    const isLoggedIn = !!localStorage.getItem("accessToken");
+    const navigate = useNavigate();
 
     return(
         <header>
@@ -15,8 +17,20 @@ export default function Header() {
                 <div className="avatar" onClick={toggleDropdown}>👤</div>
                 {dropdownOpen && (
                     <div className="avatar-dropdown">
-                        <Link to="/login" onClick={() => setDropdownOpen(false)}>Login</Link>
-                        <Link to="/register" onClick={() => setDropdownOpen(false)}>Sign Up</Link>
+                        {!isLoggedIn ? (
+                            <>
+                                <Link to="/login" onClick={() => setDropdownOpen(false)}>Login</Link>
+                                <Link to="/register" onClick={() => setDropdownOpen(false)}>Sign Up</Link>
+                            </>
+                        ) : (
+                            <>
+                                    <Link to="/profile" onClick={() => setDropdownOpen(false)}>Profile</Link>
+                                    <button onClick={() => {localStorage.removeItem("accessToken");
+                                        setDropdownOpen(false); navigate("/login");
+}}>Logout</button>
+                                </>
+                        ) }
+                        
                     </div>
                 )}
       </div>
