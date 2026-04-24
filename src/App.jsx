@@ -6,6 +6,8 @@ import Logout from './components/layout/Logout';
 import Dashboard from './components/layout/Dashboard';
 import Register from './components/layout/Register';
 import Login from './components/layout/Login';
+import Pricing from './components/layout/Pricing';
+
 import { Routes, Route } from "react-router-dom";
 import './index.css'
 import { ToastContainer } from 'react-toastify';
@@ -23,6 +25,7 @@ return (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/pricing" element={<Pricing />} />
         </Routes>
 
         <ToastContainer
