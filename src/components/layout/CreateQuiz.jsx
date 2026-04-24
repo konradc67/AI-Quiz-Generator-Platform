@@ -7,7 +7,19 @@ export default function CreateQuiz(){
     const [difficulty, setDifficulty] = useState('medium');
 
     const [isLoading, setIsLoading] = useState(false);
+
     const [quizResults, setQuizResults] = useState(null);
+
+    function validateQuizData(data) {
+    if (!data || !Array.isArray(data.questions)) {
+        return false;
+    }
+
+    return data.questions.every(q =>
+        typeof q === "string" ||
+        (typeof q.text === "string" && q.text.trim() !== "")
+    );
+}
 
     const handleGenerateQuiz = async () => {
         if (!prompt.trim()) {
@@ -32,9 +44,15 @@ export default function CreateQuiz(){
         
         const data = await response.json();
         if (response.ok) {
-                setQuizResults(data.questions); 
-                toast.success('Quiz generated successfully!');
-            } else {
+
+    if (!validateQuizData(data)) {
+        toast.error('Invalid quiz data from server');
+        return;
+    }
+
+    setQuizResults(data.questions); 
+    toast.success('Quiz generated successfully!');}           
+        else {
                 toast.error(data.error || 'Error generating quiz.');
             }
         } catch (error) {
@@ -127,8 +145,10 @@ export default function CreateQuiz(){
                         <>
                             <p className="status-text" style={{ color: 'var(--neon-green)' }}>Quiz Generated Successfully!</p>
                             <ul className="question-list">
-                                {quizResults && quizResults.map((question, index) => (
-                                    <li key={index}>{index + 1}. {question.text || question}</li>
+                                {Array.isArray(quizResults) && quizResults.map((question, index) => (
+                                    <li key={index}>
+                                     {index + 1}. {question?.text || question || "Invalid question"}
+                                                    </li>
                                 ))}
                             </ul>
                         </>
