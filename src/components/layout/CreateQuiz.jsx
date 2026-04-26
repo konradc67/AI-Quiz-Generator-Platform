@@ -10,6 +10,8 @@ export default function CreateQuiz(){
     const [quizResults, setQuizResults] = useState(null);
 
     const handleGenerateQuiz = async () => {
+        const token = localStorage.getItem("accessToken");
+
         if (!prompt.trim()) {
             toast.warning('Please enter a quiz topic.');
             return;
@@ -17,10 +19,12 @@ export default function CreateQuiz(){
         setIsLoading(true);
         setQuizResults(null);
         try{
-          const response = await fetch("/generate/",{
+
+          const response = await fetch("/api/generate/",{
             method: 'POST',
             headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
          }     
           ,
           body: JSON.stringify({
@@ -31,6 +35,7 @@ export default function CreateQuiz(){
         })
         
         const data = await response.json();
+        
         if (response.ok) {
                 setQuizResults(data.questions); 
                 toast.success('Quiz generated successfully!');
@@ -117,7 +122,7 @@ export default function CreateQuiz(){
             </div>
 
             {(isLoading || quizResults) && (
-                <div className="results-panel" style={{ marginTop: '50px' }}>
+                <div className="results-panel">
                     {isLoading ? (
                         <div className="loading-container">
                             <div className="neon-spinner"></div>
@@ -125,12 +130,23 @@ export default function CreateQuiz(){
                         </div>
                     ) : (
                         <>
-                            <p className="status-text" style={{ color: 'var(--neon-green)' }}>Quiz Generated Successfully!</p>
-                            <ul className="question-list">
+                           
+                            <div className="quiz-preview-list">
                                 {quizResults && quizResults.map((question, index) => (
-                                    <li key={index}>{index + 1}. {question.text || question}</li>
+                                    <div key={index} className="quiz-question-card">
+                                        <h4>
+                                            {index + 1}. {question.q}
+                                        </h4>
+                                        <ul>
+                                            {question.a && question.a.map((answer, idx) => (
+                                                <li key={idx}>
+                                                    {answer}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </>
                     )}
                 </div>
