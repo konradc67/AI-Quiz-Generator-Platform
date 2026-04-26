@@ -13,7 +13,6 @@ export default function Header() {
         <div className="logo-text">AI QUIZ GEN</div>
       </div>
       <div className="header-actions">
-        <button className="create-btn">CREATE NEW</button>
                 <div className="avatar" onClick={toggleDropdown}>👤</div>
                 {dropdownOpen && (
                     <div className="avatar-dropdown">

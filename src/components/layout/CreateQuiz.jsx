@@ -17,7 +17,7 @@ export default function CreateQuiz(){
         setIsLoading(true);
         setQuizResults(null);
         try{
-          const response = await fetch("https://ai-quiz-generator-platform-backend.vercel.app/createquiz",{
+          const response = await fetch("/generate",{
             method: 'POST',
             headers: {
           'Content-Type': 'application/json'

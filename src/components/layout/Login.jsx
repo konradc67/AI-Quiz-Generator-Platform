@@ -20,7 +20,7 @@ export default function Login() {
         };
 
         try {
-            const url = 'https://ai-quiz-generator-platform-backend.vercel.app/user/login/';
+            const url = '/api/user/login/';
             
             const response = await fetch(url, {
                 method: 'POST',

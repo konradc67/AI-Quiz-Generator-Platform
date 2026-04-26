@@ -10,7 +10,7 @@ export default function Profile() {
             const token = localStorage.getItem("accessToken");
 
             try {
-                const response = await fetch("https://ai-quiz-generator-platform-backend.vercel.app/user/profile/", {
+                const response = await fetch("/api/user/profile/", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

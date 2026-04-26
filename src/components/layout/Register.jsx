@@ -31,7 +31,7 @@ export default function Register() {
 
         }
         try{
-            const url = 'https://ai-quiz-generator-platform-backend.vercel.app/user/register/'
+            const url = '/api/user/register/';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
