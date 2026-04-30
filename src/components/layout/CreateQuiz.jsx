@@ -19,20 +19,6 @@ export default function CreateQuiz(){
         setIsLoading(true);
         setQuizResults(null);
         try{
-            if (!token) {
-                // If no token is found, send the prompt without authentication (if your backend allows it)
-                const response = await fetch("/api/generate/",{
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prompt: prompt,
-                        questionCount: questionCount,
-                        difficulty: difficulty
-                    })
-                });
-            }
           const response = await fetch("/api/generate/",{
             method: 'POST',
             headers: {
