@@ -6,7 +6,7 @@ export default function Sidebar() {
 
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
-        navigate("/login");
+        navigate("/");
     }
 
     return (

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 export default function Header() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -8,11 +10,11 @@ export default function Header() {
 
     return(
         <header>
-        <div className="logo-group">
-        <div className="logo-icon">🧠</div>
-        <div className="logo-text">AI QUIZ GEN</div>
-      </div>
-      <div className="header-actions">
+            <div className="logo-group">
+                <div className="logo-icon">🧠</div>
+                <div className="logo-text">AI QUIZ GEN</div>
+            </div>
+            <div className="header-actions">
                 <div className="avatar" onClick={toggleDropdown}>👤</div>
                 {dropdownOpen && (
                     <div className="avatar-dropdown">
@@ -23,17 +25,18 @@ export default function Header() {
                             </>
                         ) : (
                             <>
-                                    <Link to="/profile" onClick={() => setDropdownOpen(false)}>Profile</Link>
-                                    <button onClick={() => {localStorage.removeItem("accessToken");
-                                        setDropdownOpen(false); navigate("/login");
-}}>Logout</button>
-                                </>
-                        ) }
-                        
+                                <Link to="/profile" onClick={() => setDropdownOpen(false)}>Profile</Link>
+                                <button onClick={() => {
+                                    localStorage.removeItem("accessToken");
+                                    setDropdownOpen(false); 
+                                    navigate("/");
+                                    toast.info("Logged out successfully!");
+                                }}>Logout</button>
+                            </>
+                        )}
                     </div>
                 )}
-      </div>
+            </div>
         </header>
     );
-
 }
