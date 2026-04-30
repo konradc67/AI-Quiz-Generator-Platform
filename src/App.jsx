@@ -18,11 +18,11 @@ return (
 
     <MainLayout>
         <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<CreateQuiz/>} />
             <Route path="/history" element={<MyHistory/>} />
             <Route path="/profile" element={<Profile/>} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/pricing" element={<Pricing />} />
