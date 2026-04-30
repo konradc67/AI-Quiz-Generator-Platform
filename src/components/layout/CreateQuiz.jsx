@@ -18,25 +18,29 @@ export default function CreateQuiz(){
         }
         setIsLoading(true);
         setQuizResults(null);
-        try{
+        
+        try {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
 
-          const response = await fetch("/api/generate/",{
-            method: 'POST',
-            headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-         }     
-          ,
-          body: JSON.stringify({
-            prompt: prompt,
-            questionCount: questionCount,
-            difficulty: difficulty
-          })
-        })
+            const response = await fetch("/api/generate/", {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    prompt: prompt,
+                    questionCount: questionCount,
+                    difficulty: difficulty
+                })
+            });
         
-        const data = await response.json();
+            const data = await response.json();
         
-        if (response.ok) {
+            if (response.ok) {
                 setQuizResults(data.questions); 
                 toast.success('Quiz generated successfully!');
             } else {
@@ -48,9 +52,9 @@ export default function CreateQuiz(){
         } finally {
             setIsLoading(false);
         }
-
     }
- return (
+
+    return (
         <>
             <div className="form-panel">
                 <div className="form-group">
@@ -130,7 +134,6 @@ export default function CreateQuiz(){
                         </div>
                     ) : (
                         <>
-                           
                             <div className="quiz-preview-list">
                                 {quizResults && quizResults.map((question, index) => (
                                     <div key={index} className="quiz-question-card">
