@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 
 export default function CreateQuiz(){
     const [prompt, setPrompt] = useState('');
-    const [questionCount, setQuestionCount] = useState(10);
-    const [difficulty, setDifficulty] = useState('medium');
+    const [questionCount, setQuestionCount] = useState(5);
+    const [difficulty, setDifficulty] = useState('easy');
 
     const [isLoading, setIsLoading] = useState(false);
     const [quizResults, setQuizResults] = useState(null);
@@ -68,8 +68,8 @@ export default function CreateQuiz(){
                     <div className="range-container">
                         <input 
                             type="range" 
-                            min="10" 
-                            max="50" 
+                            min="5" 
+                            max="30" 
                             value={questionCount} 
                             onChange={(e) => setQuestionCount(e.target.value)} 
                             disabled={isLoading}
