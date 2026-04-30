@@ -4,10 +4,14 @@ import { toast } from 'react-toastify';
 export default function MyHistory() {
     const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    
+    // Nowy stan do trzymania szczegółów klikniętego quizu
+    const [selectedQuiz, setSelectedQuiz] = useState(null); 
+    
     const token = localStorage.getItem("accessToken");
 
+    // Pobieranie głównej listy (tak jak było)
     useEffect(() => {
-        // Jeśli nie ma tokena, to nawet nie próbujemy pobierać z bazy
         if (!token) {
             setIsLoading(false);
             return;
@@ -15,7 +19,6 @@ export default function MyHistory() {
 
         const fetchHistory = async () => {
             try {
-                // Analogicznie do generate, uderzamy w historię. Metoda to GET (domyślna)
                 const response = await fetch("/api/history/", {
                     method: 'GET',
                     headers: {
@@ -23,26 +26,47 @@ export default function MyHistory() {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     setHistory(data.history);
                 } else {
                     toast.error(data.error || 'Failed to fetch history.');
                 }
             } catch (error) {
-                console.error('Server connection error: ', error);
-                toast.error('Server connection error.');
+                console.error('Server error: ', error);
             } finally {
                 setIsLoading(false);
             }
         };
-
         fetchHistory();
     }, [token]);
 
-    // UI dla niezalogowanego gościa
+    // Nowa funkcja pobierająca szczegóły pojedynczego quizu
+    const handleViewQuiz = async (quizId) => {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`/api/history/${quizId}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            
+            if (response.ok) {
+                setSelectedQuiz(data);
+            } else {
+                toast.error(data.error || 'Failed to load quiz details.');
+            }
+        } catch (error) {
+            toast.error('Server connection error.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // UI dla niezalogowanego
     if (!token) {
         return (
             <div className="results-panel">
@@ -52,6 +76,51 @@ export default function MyHistory() {
         );
     }
 
+    // WIDOK 2: SZCZEGÓŁY QUIZU (pokazuje się, gdy selectedQuiz ma dane)
+    if (selectedQuiz) {
+        return (
+            <div className="results-panel">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h2>{selectedQuiz.topic}</h2>
+                    {/* Przycisk powrotu do listy (po prostu czyści stan) */}
+                    <button 
+                        className="generate-btn" 
+                        style={{ padding: '8px 15px', width: 'auto', fontSize: '0.9rem' }}
+                        onClick={() => setSelectedQuiz(null)}
+                    >
+                        ← BACK TO LIST
+                    </button>
+                </div>
+                <p style={{ opacity: 0.7, marginBottom: '20px' }}>Generated on: {selectedQuiz.created_at}</p>
+                
+                <div className="quiz-preview-list">
+                    {selectedQuiz.questions.map((question, index) => (
+                        <div key={index} className="quiz-question-card">
+                            <h4>
+                                {index + 1}. {question.q}
+                            </h4>
+                            <ul>
+                                {question.a.map((answer, idx) => (
+                                    <li 
+                                        key={idx} 
+                                        style={{ 
+                                            // Zielony kolor dla poprawnej odpowiedzi!
+                                            color: answer === question.correct ? 'var(--neon-green, #00ff66)' : 'inherit',
+                                            fontWeight: answer === question.correct ? 'bold' : 'normal'
+                                        }}
+                                    >
+                                        {answer} {answer === question.correct && " ✓"}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // WIDOK 1: LISTA QUIZÓW (główny widok)
     return (
         <div className="results-panel">
             <h2>My History</h2>
@@ -59,14 +128,21 @@ export default function MyHistory() {
             {isLoading ? (
                 <div className="loading-container">
                     <div className="neon-spinner"></div>
-                    <p className="status-text">Loading your quizzes...</p>
+                    <p className="status-text">Loading...</p>
                 </div>
             ) : history.length === 0 ? (
                 <p className="status-text">You haven't generated any quizzes yet.</p>
             ) : (
                 <div className="quiz-preview-list">
                     {history.map((quiz) => (
-                        <div key={quiz.id} className="quiz-question-card" style={{ marginBottom: '15px' }}>
+                        <div 
+                            key={quiz.id} 
+                            className="quiz-question-card" 
+                            style={{ marginBottom: '15px', cursor: 'pointer', transition: '0.2s' }}
+                            onClick={() => handleViewQuiz(quiz.id)}
+                            onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--neon-blue, #00f3ff)'}
+                            onMouseOut={(e) => e.currentTarget.style.borderColor = 'rgba(0, 243, 255, 0.2)'}
+                        >
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <h3>{quiz.topic}</h3>
                                 <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>
@@ -75,6 +151,9 @@ export default function MyHistory() {
                             </div>
                             <p style={{ marginTop: '10px' }}>
                                 Questions: <strong style={{ color: 'var(--neon-blue, #00f3ff)' }}>{quiz.questions_count}</strong>
+                            </p>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--neon-blue, #00f3ff)', marginTop: '5px', textAlign: 'right' }}>
+                                Click to view details ⭢
                             </p>
                         </div>
                     ))}
