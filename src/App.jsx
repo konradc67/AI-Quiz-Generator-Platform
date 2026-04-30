@@ -8,37 +8,35 @@ import Register from './components/layout/Register';
 import Login from './components/layout/Login';
 import Pricing from './components/layout/Pricing';
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom"; 
 import './index.css'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function App(){
-return (
+    return (
+        <MainLayout>
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/create" element={<CreateQuiz/>} />
+                <Route path="/history" element={<MyHistory/>} />
+                <Route path="/profile" element={<Profile/>} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/pricing" element={<Pricing />} />
+                
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
 
-    <MainLayout>
-        <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/create-quiz" element={<CreateQuiz/>} />
-            <Route path="/history" element={<MyHistory/>} />
-            <Route path="/profile" element={<Profile/>} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/pricing" element={<Pricing />} />
-        </Routes>
-
-        <ToastContainer
-            position="bottom-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            theme="dark"
-        />
-
-    </MainLayout>
-
-);
-
+            <ToastContainer
+                position="bottom-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                theme="dark"
+            />
+        </MainLayout>
+    );
 }

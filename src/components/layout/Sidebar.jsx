@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+
 export default function Sidebar() {
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem("accessToken");
@@ -7,18 +8,22 @@ export default function Sidebar() {
         localStorage.removeItem("accessToken");
         navigate("/login");
     }
+
     return (
         <aside className="sidebar">
-            <NavLink to="/dashboard" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+            {/* Poprawka 1: Dashboard wskazuje na główny adres "/" */}
+            <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                 <div className="nav-icon">🚀</div> Dashboard
             </NavLink>
-      <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-        <div className="nav-icon">📝</div> Create Quiz
-      </NavLink>
+            
+            {/* Poprawka 2: Create Quiz wskazuje na "/create" */}
+            <NavLink to="/create" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+                <div className="nav-icon">📝</div> Create Quiz
+            </NavLink>
+            
             {isLoggedIn && (
                 <>
-                    <NavLink to="/history" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"
-                    } >
+                    <NavLink to="/history" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                         <div className="nav-icon">📜</div> My History
                     </NavLink>
                     <NavLink to="/profile" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
@@ -27,7 +32,8 @@ export default function Sidebar() {
                     <button className="nav-item" onClick={handleLogout}>
                         <div className="nav-icon">🚪</div> Logout
                     </button>
-                </>)}
-    </aside>
-  );
+                </>
+            )}
+        </aside>
+    );
 }
