@@ -42,6 +42,9 @@ export default function CreateQuiz(){
             });
         
             const data = await response.json();
+            
+            // LOGOWANIE DANYCH - wciśnij F12 w przeglądarce, żeby zobaczyć ten wynik:
+            console.log("Dane otrzymane od AI:", data.questions);
         
             if (response.ok) {
                 setQuizResults(data.questions); 
@@ -66,10 +69,17 @@ export default function CreateQuiz(){
         }
     };
 
+    const getCorrectAnswer = (question) => {
+        return question.correct || question.correct_answer || question.correctAnswer || "";
+    };
+
     const handleSubmitQuiz = () => {
         let currentScore = 0;
         quizResults.forEach((q, index) => {
-            if (userAnswers[index] === q.correct) {
+            const actualCorrect = getCorrectAnswer(q);
+            
+            // Sprawdzamy ignorując wielkość liter i spacje na końcach
+            if (String(userAnswers[index]).trim().toLowerCase() === String(actualCorrect).trim().toLowerCase()) {
                 currentScore += 1;
             }
         });
@@ -115,42 +125,21 @@ export default function CreateQuiz(){
                         <label>Difficulty</label>
                         <div className="radio-group">
                             <div className="radio-item">
-                                <input 
-                                    type="radio" name="diff" value="easy" 
-                                    checked={difficulty === 'easy'}
-                                    onChange={(e) => setDifficulty(e.target.value)} 
-                                    disabled={isLoading}
-                                /> Easy
+                                <input type="radio" name="diff" value="easy" checked={difficulty === 'easy'} onChange={(e) => setDifficulty(e.target.value)} disabled={isLoading} /> Easy
                             </div>
                             <div className="radio-item">
-                                <input 
-                                    type="radio" name="diff" value="medium" 
-                                    checked={difficulty === 'medium'}
-                                    onChange={(e) => setDifficulty(e.target.value)} 
-                                    disabled={isLoading}
-                                /> Medium
+                                <input type="radio" name="diff" value="medium" checked={difficulty === 'medium'} onChange={(e) => setDifficulty(e.target.value)} disabled={isLoading} /> Medium
                             </div>
                             <div className="radio-item">
-                                <input 
-                                    type="radio" name="diff" value="high" 
-                                    checked={difficulty === 'high'}
-                                    onChange={(e) => setDifficulty(e.target.value)} 
-                                    disabled={isLoading}
-                                /> High
+                                <input type="radio" name="diff" value="high" checked={difficulty === 'high'} onChange={(e) => setDifficulty(e.target.value)} disabled={isLoading} /> High
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button 
-                    className="generate-btn" 
-                    onClick={handleGenerateQuiz}
-                    disabled={isLoading}
-                    style={{ opacity: isLoading ? 0.7 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
-                >
+                <button className="generate-btn" onClick={handleGenerateQuiz} disabled={isLoading} style={{ opacity: isLoading ? 0.7 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}>
                     {isLoading ? 'GENERATING...' : 'GENERATE WITH AI'}
                 </button>
-                
                 <div className="neon-arrow">⭆</div>
             </div>
 
@@ -164,58 +153,60 @@ export default function CreateQuiz(){
                     ) : (
                         <>
                             <div className="quiz-preview-list">
-                                {quizResults && quizResults.map((question, index) => (
-                                    <div key={index} className="quiz-question-card" style={{ marginBottom: '20px' }}>
-                                        <h4>
-                                            {index + 1}. {question.q}
-                                        </h4>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px' }}>
-                                            {question.a && question.a.map((answer, idx) => {
-                                                const isSelected = userAnswers[index] === answer;
-                                                const isCorrect = answer === question.correct;
-                                                
-                                                const showAsCorrect = isQuizSubmitted && isCorrect;
-                                                const showAsWrong = isQuizSubmitted && isSelected && !isCorrect;
+                                {quizResults && quizResults.map((question, index) => {
+                                    const actualCorrect = getCorrectAnswer(question);
+                                    
+                                    return (
+                                        <div key={index} className="quiz-question-card" style={{ marginBottom: '20px' }}>
+                                            <h4>{index + 1}. {question.q}</h4>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px' }}>
+                                                {question.a && question.a.map((answer, idx) => {
+                                                    const isSelected = userAnswers[index] === answer;
+                                                    const isCorrect = String(answer).trim().toLowerCase() === String(actualCorrect).trim().toLowerCase();
+                                                    
+                                                    const showAsCorrect = isQuizSubmitted && isCorrect;
+                                                    const showAsWrong = isQuizSubmitted && isSelected && !isCorrect;
 
-                                                let bgColor = 'rgba(0, 243, 255, 0.05)';
-                                                let borderColor = 'rgba(0, 243, 255, 0.2)';
+                                                    let bgColor = 'rgba(0, 243, 255, 0.05)';
+                                                    let borderColor = 'rgba(0, 243, 255, 0.2)';
 
-                                                if (showAsCorrect) {
-                                                    bgColor = 'rgba(0, 255, 102, 0.1)'; 
-                                                    borderColor = 'var(--neon-green, #00ff66)'; 
-                                                } else if (showAsWrong) {
-                                                    bgColor = 'rgba(255, 0, 51, 0.1)'; 
-                                                    borderColor = '#ff0033'; 
-                                                } else if (isSelected && !isQuizSubmitted) { // Zaznaczanie na niebiesko TYLKO przed wysłaniem
-                                                    bgColor = 'rgba(0, 243, 255, 0.2)'; 
-                                                    borderColor = 'var(--neon-blue, #00f3ff)';
-                                                }
+                                                    if (showAsCorrect) {
+                                                        bgColor = 'rgba(0, 255, 102, 0.1)'; 
+                                                        borderColor = 'var(--neon-green, #00ff66)'; 
+                                                    } else if (showAsWrong) {
+                                                        bgColor = 'rgba(255, 0, 51, 0.1)'; 
+                                                        borderColor = '#ff0033'; 
+                                                    } else if (isSelected && !isQuizSubmitted) {
+                                                        bgColor = 'rgba(0, 243, 255, 0.2)'; 
+                                                        borderColor = 'var(--neon-blue, #00f3ff)';
+                                                    }
 
-                                                return (
-                                                    <div 
-                                                        key={idx}
-                                                        onClick={() => handleAnswerSelect(index, answer)}
-                                                        style={{
-                                                            padding: '12px 15px',
-                                                            border: `1px solid ${borderColor}`,
-                                                            borderRadius: '8px',
-                                                            backgroundColor: bgColor,
-                                                            cursor: isQuizSubmitted ? 'default' : 'pointer',
-                                                            transition: 'all 0.2s',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center'
-                                                        }}
-                                                    >
-                                                        <span>{answer}</span>
-                                                        {showAsCorrect && <span style={{ color: 'var(--neon-green, #00ff66)', fontWeight: 'bold' }}>✓</span>}
-                                                        {showAsWrong && <span style={{ color: '#ff0033', fontWeight: 'bold' }}>✗</span>}
-                                                    </div>
-                                                );
-                                            })}
+                                                    return (
+                                                        <div 
+                                                            key={idx}
+                                                            onClick={() => handleAnswerSelect(index, answer)}
+                                                            style={{
+                                                                padding: '12px 15px',
+                                                                border: `1px solid ${borderColor}`,
+                                                                borderRadius: '8px',
+                                                                backgroundColor: bgColor,
+                                                                cursor: isQuizSubmitted ? 'default' : 'pointer',
+                                                                transition: 'all 0.2s',
+                                                                display: 'flex',
+                                                                justifyContent: 'space-between',
+                                                                alignItems: 'center'
+                                                            }}
+                                                        >
+                                                            <span>{answer}</span>
+                                                            {showAsCorrect && <span style={{ color: 'var(--neon-green, #00ff66)', fontWeight: 'bold' }}>✓</span>}
+                                                            {showAsWrong && <span style={{ color: '#ff0033', fontWeight: 'bold' }}>✗</span>}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
 
                             {quizResults && quizResults.length > 0 && (
