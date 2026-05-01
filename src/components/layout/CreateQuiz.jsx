@@ -77,7 +77,19 @@ export default function CreateQuiz(){
     };
 
     const getCorrectAnswer = (question) => {
-        return question.correct || question.correct_answer || question.correctAnswer || "";
+        let correctVal = question.correct || question.correct_answer || question.correctAnswer || "";
+        
+        const match = String(correctVal).trim().toLowerCase().match(/^odp(\d+)$/);
+        
+        if (match) {
+            const index = parseInt(match[1], 10) - 1; 
+            
+            if (question.a && question.a[index]) {
+                return question.a[index]; 
+            }
+        }
+        
+        return correctVal; 
     };
 
     const handleSubmitQuiz = () => {
