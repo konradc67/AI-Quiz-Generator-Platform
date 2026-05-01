@@ -42,8 +42,6 @@ export default function CreateQuiz(){
             });
         
             const data = await response.json();
-            
-            // LOGOWANIE DANYCH - wciśnij F12 w przeglądarce, żeby zobaczyć ten wynik:
             console.log("Dane otrzymane od AI:", data.questions);
         
             if (response.ok) {
@@ -69,6 +67,15 @@ export default function CreateQuiz(){
         }
     };
 
+    const normalizeText = (text) => {
+        if (!text) return "";
+        return String(text)
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .replace(/[.,!?]/g, '')
+            .trim();
+    };
+
     const getCorrectAnswer = (question) => {
         return question.correct || question.correct_answer || question.correctAnswer || "";
     };
@@ -76,10 +83,14 @@ export default function CreateQuiz(){
     const handleSubmitQuiz = () => {
         let currentScore = 0;
         quizResults.forEach((q, index) => {
-            const actualCorrect = getCorrectAnswer(q);
+            const actualCorrect = normalizeText(getCorrectAnswer(q));
+            const userAnswer = normalizeText(userAnswers[index]);
             
-            // Sprawdzamy ignorując wielkość liter i spacje na końcach
-            if (String(userAnswers[index]).trim().toLowerCase() === String(actualCorrect).trim().toLowerCase()) {
+            console.log(`Pytanie ${index + 1}:`);
+            console.log(`- Twój wybór: "${userAnswer}"`);
+            console.log(`- Poprawna od AI: "${actualCorrect}"`);
+            
+            if (userAnswer === actualCorrect) {
                 currentScore += 1;
             }
         });
@@ -154,7 +165,7 @@ export default function CreateQuiz(){
                         <>
                             <div className="quiz-preview-list">
                                 {quizResults && quizResults.map((question, index) => {
-                                    const actualCorrect = getCorrectAnswer(question);
+                                    const actualCorrect = normalizeText(getCorrectAnswer(question));
                                     
                                     return (
                                         <div key={index} className="quiz-question-card" style={{ marginBottom: '20px' }}>
@@ -162,7 +173,7 @@ export default function CreateQuiz(){
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px' }}>
                                                 {question.a && question.a.map((answer, idx) => {
                                                     const isSelected = userAnswers[index] === answer;
-                                                    const isCorrect = String(answer).trim().toLowerCase() === String(actualCorrect).trim().toLowerCase();
+                                                    const isCorrect = normalizeText(answer) === actualCorrect;
                                                     
                                                     const showAsCorrect = isQuizSubmitted && isCorrect;
                                                     const showAsWrong = isQuizSubmitted && isSelected && !isCorrect;
