@@ -87,6 +87,22 @@ export default function MyHistory() {
         }
     };
 
+    const getCorrectAnswer = (question) => {
+        let correctVal = question.correct || question.correct_answer || question.correctAnswer || "";
+        
+        // Jeśli baza/AI wypluje "odp1", "odp2" itp.
+        const match = String(correctVal).trim().toLowerCase().match(/^odp(\d+)$/);
+        
+        if (match) {
+            const index = parseInt(match[1], 10) - 1; 
+            if (question.a && question.a[index]) {
+                return question.a[index]; 
+            }
+        }
+        
+        return correctVal; 
+    };
+
     const normalizeText = (text) => {
         if (!text) return "";
         return String(text)
@@ -99,7 +115,7 @@ export default function MyHistory() {
     const handleSubmitQuiz = () => {
         let currentScore = 0;
         selectedQuiz.questions.forEach((q, index) => {
-            const actualCorrect = normalizeText(q.correct);
+            const actualCorrect = normalizeText(getCorrectAnswer(q));
             const userAnswer = normalizeText(userAnswers[index]);
             
             if (userAnswer === actualCorrect && actualCorrect !== "") {
@@ -142,7 +158,8 @@ export default function MyHistory() {
                 
                 <div className="quiz-preview-list">
                     {selectedQuiz.questions.map((question, index) => {
-                        const actualCorrect = normalizeText(question.correct);
+                        const actualCorrect = normalizeText(getCorrectAnswer(question));
+                        const rawCorrect = getCorrectAnswer(question); // Do wyświetlenia tekstu błędu
 
                         return (
                             <div key={index} className="quiz-question-card" style={{ marginBottom: '20px' }}>
@@ -191,9 +208,10 @@ export default function MyHistory() {
                                                     {showAsWrong && <span style={{ color: '#ff0033', fontWeight: 'bold' }}>✗</span>}
                                                 </div>
                                                 
-                                                {showAsWrong && question.correct && (
+                                                {/* Pokazuje odpowiedź z bazy, jeśli wystąpił błąd */}
+                                                {showAsWrong && rawCorrect && (
                                                     <div style={{ marginTop: '5px', fontSize: '0.8rem', color: '#ff0033', opacity: 0.8 }}>
-                                                        Correct answer is: "{question.correct}"
+                                                        Correct answer is: "{rawCorrect}"
                                                     </div>
                                                 )}
                                             </div>
