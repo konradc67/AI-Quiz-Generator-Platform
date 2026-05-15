@@ -126,6 +126,7 @@ export default function CreateQuiz(){
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         disabled={isLoading}
+                        maxlength="50"
                     ></textarea>
                 </div>
 
